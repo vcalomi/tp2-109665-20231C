@@ -33,7 +33,8 @@ void mostrar_ayuda()
 	printf("D - Elimina el hospital activo del listado de hospitales\n");
 }
 
-void cargar_hospital(menu_t *menu)
+void cargar_hospital(
+	menu_t *menu) // si sobrescribo un hospital con la clave, liberarlo con anterior
 {
 	char archivo[100];
 	printf("Ingresa el nombre del archivo: ");
@@ -53,6 +54,34 @@ void cargar_hospital(menu_t *menu)
 	printf("Ingresa una clave para guardar con el hospital: ");
 	fgets(clave, sizeof(clave), stdin);
 	clave[strcspn(clave, "\n")] = '\0';
+
+	if (hash_obtener(menu->hospitales, clave) != NULL) {
+		char decision[5];
+		printf("Ya existe un archivo con esa clave\n");
+		printf("Se sobreescribira el hospital, y perderas el hospital anterior");
+		printf("Si quieres continuar, presiona 's', sino presiona 'n'\n");
+		printf(">");
+		scanf("%s", decision);
+		while (true) {
+			if (strcmp(decision, "s") == 0 ||
+			    strcmp(decision, "si") == 0) {
+				void *anterior;
+				hash_insertar(menu->hospitales, clave, hospital,
+					      &anterior);
+				hospital_destruir((hospital_t *)anterior);
+				printf("Sobreescrito correctamente\n");
+				return;
+			} else if (strcmp(decision, "n") == 0 ||
+				   strcmp(decision, "no") == 0) {
+				printf("Carga cancelada\n");
+				return;
+			} else {
+				printf("Entrada incorrecta, intente nuevamente con 's' o 'n'\n");
+				printf(">");
+				scanf("%s", decision);
+			}
+		}
+	}
 
 	hash_insertar(menu->hospitales, clave, hospital, NULL);
 	printf("Cargado correctamente\n");
