@@ -23,14 +23,14 @@ menu_t *crear_menu()
 void mostrar_ayuda()
 {
 	printf("Comandos disponibles:\n");
-	printf("S - salir/exit\n");
-	printf("H - ayuda/help\n");
-	printf("C - cargar\n");
-	printf("E - estado\n");
-	printf("A - activar\n");
-	printf("M - mostrar\n");
-	printf("L - listar\n");
-	printf("D - destruir\n");
+	printf("S - Sale del programa\n");
+	printf("H - Muestra todos los comandos y sus funcionalidades\n");
+	printf("C - Carga un hospital a partir de un archivo\n");
+	printf("E - Muestra un listado de todos los hospitales cargados con su identificador y el hospital activo en caso de que haya uno\n");
+	printf("A - Activa un hospital a partir de un identificador\n");
+	printf("M - Muestra los nombres de todos los pokemones que estan en el hospital activo\n");
+	printf("L - Muestra los datos de todos los pokemones que estan en el hospital activo\n");
+	printf("D - Elimina el hospital activo del listado de hospitales\n");
 }
 
 void cargar_hospital(menu_t *menu)
