@@ -40,6 +40,10 @@ void cargar_hospital(menu_t *menu)
 	scanf("%s", archivo);
 
 	hospital_t *hospital = hospital_crear_desde_archivo(archivo);
+	if (hospital == NULL) {
+		printf("Nombre de archivo o formato de archivo incorrecto, intente nuevamente\n");
+		return;
+	}
 
 	int c;
 	while ((c = getchar()) != '\n' && c != EOF)
@@ -90,12 +94,12 @@ void convertir_a_minusculas(char *cadena)
 
 hospital_t *activar_hospital(menu_t *menu, char *clave_activa)
 {
-	hospital_t *hospital = NULL;
 	char identificador[10];
 	printf("Ingresa la clave del hospital que deseas activar: ");
 	scanf("%s", identificador);
 
-	hospital = (hospital_t *)hash_obtener(menu->hospitales, identificador);
+	hospital_t *hospital =
+		(hospital_t *)hash_obtener(menu->hospitales, identificador);
 	printf("Hospital %s activado, este hospital tiene %ld pokemones\n",
 	       identificador, hospital_cantidad_pokemones(hospital));
 	strcpy(clave_activa, identificador);
