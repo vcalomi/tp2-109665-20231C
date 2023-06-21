@@ -17,7 +17,17 @@ menu_t *crear_menu()
 	if (!menu)
 		return NULL;
 	menu->hospitales = hash_crear(10);
+	menu->cantidad_hospitales = 0;
 	return menu;
+}
+
+void convertir_a_minusculas(char *cadena)
+{
+	int i = 0;
+	while (cadena[i] != '\0') {
+		cadena[i] = (char)tolower(cadena[i]);
+		i++;
+	}
 }
 
 void mostrar_ayuda()
@@ -33,8 +43,7 @@ void mostrar_ayuda()
 	printf("D - Elimina el hospital activo del listado de hospitales\n");
 }
 
-void cargar_hospital(
-	menu_t *menu) // si sobrescribo un hospital con la clave, liberarlo con anterior
+void cargar_hospital(menu_t *menu)
 {
 	char archivo[100];
 	printf("Ingresa el nombre del archivo: ");
@@ -54,6 +63,11 @@ void cargar_hospital(
 	printf("Ingresa una clave para guardar con el hospital: ");
 	fgets(clave, sizeof(clave), stdin);
 	clave[strcspn(clave, "\n")] = '\0';
+	if (strlen(clave) == 0) {
+		printf("El nombre no puede estar vacio, ingrese un nombre valido: ");
+		fgets(clave, sizeof(clave), stdin);
+		clave[strcspn(clave, "\n")] = '\0';
+	}
 
 	if (hash_obtener(menu->hospitales, clave) != NULL) {
 		char decision[5];
@@ -62,6 +76,7 @@ void cargar_hospital(
 		printf("Si quieres continuar, presiona 's', sino presiona 'n'\n");
 		printf(">");
 		scanf("%s", decision);
+		convertir_a_minusculas(decision);
 		while (true) {
 			if (strcmp(decision, "s") == 0 ||
 			    strcmp(decision, "si") == 0) {
@@ -79,11 +94,13 @@ void cargar_hospital(
 				printf("Entrada incorrecta, intente nuevamente con 's' o 'n'\n");
 				printf(">");
 				scanf("%s", decision);
+				convertir_a_minusculas(decision);
 			}
 		}
 	}
 
 	hash_insertar(menu->hospitales, clave, hospital, NULL);
+	menu->cantidad_hospitales++;
 	printf("Cargado correctamente\n");
 }
 
@@ -99,8 +116,13 @@ void mostrar_estado(menu_t *menu, hospital_t *activo, char *clave_activa)
 {
 	if (activo != NULL) {
 		printf("Hospital activo - %s\n", clave_activa);
+	} else
+		printf("No hay hospital activo\n");
+	if (menu->cantidad_hospitales == 0) {
+		printf("Hospitales cargados 0\n");
+		return;
 	}
-	printf("Hospitales cargados:\n");
+	printf("Hospitales cargados %ld:\n", menu->cantidad_hospitales);
 	hash_con_cada_clave(menu->hospitales, listar_hospitales,
 			    (void *)clave_activa);
 }
@@ -118,23 +140,18 @@ void destruir_menu(menu_t *menu)
 	free(menu);
 }
 
-void convertir_a_minusculas(char *cadena)
-{
-	int i = 0;
-	while (cadena[i] != '\0') {
-		cadena[i] = (char)tolower(cadena[i]);
-		i++;
-	}
-}
-
 hospital_t *activar_hospital(menu_t *menu, char *clave_activa)
 {
 	char identificador[10];
 	printf("Ingresa la clave del hospital que deseas activar: ");
 	scanf("%s", identificador);
 
-	hospital_t *hospital =
-		(hospital_t *)hash_obtener(menu->hospitales, identificador);
+	void *hospital_void_ptr = hash_obtener(menu->hospitales, identificador);
+	if (!hospital_void_ptr) {
+		printf("No hay un hospital con ese nombre, intente nuevamente\n");
+		return NULL;
+	}
+	hospital_t *hospital = (hospital_t *)hospital_void_ptr;
 	printf("Hospital %s activado, este hospital tiene %ld pokemones\n",
 	       identificador, hospital_cantidad_pokemones(hospital));
 	strcpy(clave_activa, identificador);
@@ -182,7 +199,11 @@ void destruir_hospital_activo(menu_t *menu, hospital_t *hospital,
 	}
 
 	hash_quitar(menu->hospitales, clave_activa);
+	free(clave_activa);
 	hospital_destruir(hospital);
+	hospital = NULL;
+	clave_activa = NULL;
+	menu->cantidad_hospitales -= 1;
 }
 
 void inicio()
