@@ -47,7 +47,7 @@ int main()
 	scanf("%s", comando);
 	convertir_a_minusculas(comando);
 	hospital_t *activo = NULL;
-	char *clave_activa = calloc(1, sizeof(char) * 10);
+	char *clave_activa = calloc(1, sizeof(char) * 100);
 	if (!clave_activa)
 		return -1;
 	while (true) {
@@ -59,6 +59,7 @@ int main()
 		} else if (strcmp(comando, "s") == 0 ||
 			   strcmp(comando, "salir") == 0 ||
 			   strcmp(comando, "exit") == 0) {
+			printf("Saliendo...\n");
 			destruir_menu(menu);
 			free(comando);
 			free(clave_activa);
@@ -87,8 +88,10 @@ int main()
 		} else if (strcmp(comando, "d") == 0 ||
 			   strcmp(comando, "destruir") == 0) {
 			destruir_hospital_activo(menu, activo, clave_activa);
+			activo = NULL;
+			clave_activa = NULL;
 		} else
-			printf("No existe ese comando... Intenta con otro o escribe h para recibir ayuda");
+			printf("No existe ese comando... Intenta con otro o escribe h para recibir ayuda\n");
 		printf(">");
 		scanf("%s", comando);
 		convertir_a_minusculas(comando);

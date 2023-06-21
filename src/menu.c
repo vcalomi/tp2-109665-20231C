@@ -35,7 +35,7 @@ bool listar_hospitales(const char *clave, void *valor, void *aux)
 {
 	if (strcmp(clave, (char *)aux) == 0)
 		return true;
-	printf("Hospital - %s\n", clave);
+	printf("- Hospital %s\n", clave);
 	return true;
 }
 
@@ -53,9 +53,9 @@ bool imprimir_pokemones(pokemon_t *pokemon, void *aux)
 
 bool imprimir_pokemones_detallado(pokemon_t *pokemon, void *aux)
 {
-	printf("Id del pokemon: %ld, Nombre: %s, Salud: %ld\n",
+	printf("Id del pokemon: %ld, Nombre: %s, Salud: %ld, Entrenador/es: %s\n",
 	       pokemon_id(pokemon), pokemon_nombre(pokemon),
-	       pokemon_salud(pokemon));
+	       pokemon_salud(pokemon), pokemon_entrenador(pokemon));
 	return true;
 }
 
@@ -75,8 +75,8 @@ menu_t *cargar_hospital(menu_t *menu)
 	while ((c = getchar()) != '\n' && c != EOF)
 		continue;
 
-	char clave[10];
-	printf("Ingresa una clave para guardar con el hospital: ");
+	char clave[100];
+	printf("Ingresa un nombre para guardar el hospital: ");
 	fgets(clave, sizeof(clave), stdin);
 	clave[strcspn(clave, "\n")] = '\0';
 	if (strlen(clave) == 0) {
@@ -87,7 +87,7 @@ menu_t *cargar_hospital(menu_t *menu)
 
 	if (hash_obtener(menu->hospitales, clave) != NULL) {
 		char decision[5];
-		printf("Ya existe un archivo con esa clave\n");
+		printf("Ya existe un hospital con ese nombre\n");
 		printf("Se sobreescribira el hospital, y perderas el hospital anterior");
 		printf("Si quieres continuar, presiona 's', sino presiona 'n'\n");
 		printf(">");
@@ -123,22 +123,27 @@ menu_t *cargar_hospital(menu_t *menu)
 
 void mostrar_estado(menu_t *menu, hospital_t *activo, char *clave_activa)
 {
+	if (menu->cantidad_hospitales == 0) {
+		printf("No hay ningun hospital cargado\n");
+		return;
+	}
+	if (menu->cantidad_hospitales == 1)
+		printf("Hay %ld Hospital cargado:\n",
+		       menu->cantidad_hospitales);
+	else
+		printf("Hay %ld Hospitales cargados:\n",
+		       menu->cantidad_hospitales);
+	hash_con_cada_clave(menu->hospitales, listar_hospitales,
+			    (void *)clave_activa);
 	if (activo != NULL) {
 		printf("Hospital activo - %s\n", clave_activa);
 	} else
 		printf("No hay hospital activo\n");
-	if (menu->cantidad_hospitales == 0) {
-		printf("Hospitales cargados 0\n");
-		return;
-	}
-	printf("Hospitales cargados %ld:\n", menu->cantidad_hospitales);
-	hash_con_cada_clave(menu->hospitales, listar_hospitales,
-			    (void *)clave_activa);
 }
 
 hospital_t *activar_hospital(menu_t *menu, char *clave_activa)
 {
-	char identificador[10];
+	char identificador[100];
 	printf("Ingresa la clave del hospital que deseas activar: ");
 	scanf("%s", identificador);
 
@@ -186,6 +191,9 @@ void destruir_hospital_activo(menu_t *menu, hospital_t *hospital,
 	hospital = NULL;
 	clave_activa = NULL;
 	menu->cantidad_hospitales -= 1;
+	if (!hospital) {
+		printf("Hospital destruido con exito\n");
+	}
 }
 
 void destruir_menu(menu_t *menu)
