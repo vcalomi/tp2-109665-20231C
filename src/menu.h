@@ -40,7 +40,8 @@ void destruir_menu(menu_t *menu);
  * Pide una nombre al usuario y activa el hospital con ese nombre.
  * Devuelve un puntero al hospital activado o NULL en caso de error o si no hay un hospital con ese nombre.
  */
-hospital_t *activar_hospital(menu_t *menu, char *clave_activa);
+hospital_t *activar_hospital(menu_t *menu, char *identificador,
+			     char *clave_activa);
 
 /*
  * Muestra un listado con los nombres de los pokemones en el hospital activo.

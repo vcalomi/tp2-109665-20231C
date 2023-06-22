@@ -100,20 +100,14 @@ void mostrar_estado(menu_t *menu, hospital_t *activo, char *clave_activa)
 		printf("No hay hospital activo\n");
 }
 
-hospital_t *activar_hospital(menu_t *menu, char *clave_activa)
+hospital_t *activar_hospital(menu_t *menu, char *identificador,
+			     char *clave_activa)
 {
-	char identificador[100];
-	printf("Ingresa la clave del hospital que deseas activar: ");
-	scanf("%s", identificador);
-
 	void *hospital_void_ptr = hash_obtener(menu->hospitales, identificador);
-	if (!hospital_void_ptr) {
-		printf("No hay un hospital con ese nombre, intente nuevamente\n");
+	if (!hospital_void_ptr)
 		return NULL;
-	}
+
 	hospital_t *hospital = (hospital_t *)hospital_void_ptr;
-	printf("Hospital %s activado, este hospital tiene %ld pokemones\n",
-	       identificador, hospital_cantidad_pokemones(hospital));
 	strcpy(clave_activa, identificador);
 	return hospital;
 }
