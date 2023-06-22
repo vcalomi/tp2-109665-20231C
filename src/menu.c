@@ -120,13 +120,12 @@ menu_t *cargar_hospital(menu_t *menu, char *clave, void *elemento)
 	return menu;
 }
 
-char *mostrar_estado(menu_t *menu, char *estado)
+void mostrar_estado(menu_t *menu, char *estado)
 {
 	if (!menu)
-		return NULL;
+		return;
 	hash_con_cada_clave(menu->hospitales, listar_hospitales,
 			    (void *)estado);
-	return estado;
 }
 
 hospital_t *activar_hospital(menu_t *menu, char *identificador,
@@ -143,7 +142,7 @@ hospital_t *activar_hospital(menu_t *menu, char *identificador,
 	return hospital;
 }
 
-char *mostrar_pokemones(hospital_t *activo, char *pokemones)
+void mostrar_pokemones(hospital_t *activo, char *pokemones)
 {
 	if (!activo)
 		return NULL;
@@ -152,8 +151,10 @@ char *mostrar_pokemones(hospital_t *activo, char *pokemones)
 	return pokemones;
 }
 
-char *mostrar_pokemones_detallado(hospital_t *activo, char *detalles)
+void mostrar_pokemones_detallado(hospital_t *activo, char *detalles)
 {
+	if (!activo)
+		return;
 	hospital_a_cada_pokemon(activo, concatenar_pokemones_detallado,
 				(void *)detalles);
 	return detalles;

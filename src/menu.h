@@ -18,7 +18,7 @@ menu_t *crear_menu();
 size_t cantidad_hospitales(menu_t *menu);
 
 /*
- * Pide al usuario un archivo y un nombre para cargar el hospital en el programa.
+ * Recibe el nombre de un archivo y un nombre para cargar el hospital en el programa.
  * En caso que haya un hospital con ese nombre, se reemplaza el hospital anterior por el nuevo y se guarda el viejo en la variable anterior.
  * Devuelve el menu si cargo el hospital o NULL en caso de error.
  */
@@ -32,9 +32,10 @@ menu_t *cargar_hospital_desde_archivo(menu_t *menu, char *nombre_archivo,
 menu_t *cargar_hospital(menu_t *menu, char *clave, void *elemento);
 
 /*
- * Devuelve los hospitales cargados y el hospital activo o NULL en caso de error.
+ * Guarda en la variable estado, un listado con los hospitales cargados.
+ * En caso de error, no se almacena nada en estado.
  */
-char *mostrar_estado(menu_t *menu, char *estado);
+void mostrar_estado(menu_t *menu, char *estado);
 
 /*
  * Destruye el menu liberando la memoria reservada.
@@ -42,21 +43,23 @@ char *mostrar_estado(menu_t *menu, char *estado);
 void destruir_menu(menu_t *menu);
 
 /*
- * Pide una nombre al usuario y activa el hospital con ese nombre.
+ * Recibe el nombre de un hospital y activa el hospital con ese nombre.
  * Devuelve un puntero al hospital activado o NULL en caso de error o si no hay un hospital con ese nombre.
  */
 hospital_t *activar_hospital(menu_t *menu, char *identificador,
 			     char *clave_activa);
 
 /*
- * Muestra un listado con los nombres de los pokemones en el hospital activo.
+ * Guarda en la variable pokemones los nombres de los pokemones en el hospital activo.
+ * En caso de error, no se almacena nada en pokemones.
  */
-char *mostrar_pokemones(hospital_t *activo, char *pokemones);
+void mostrar_pokemones(hospital_t *activo, char *pokemones);
 
 /*
- * Muestra un listado detallando los datos de cada pokemon en el hospital activo.
+ * Guarda en la variable detalles los datos de los pokemones en el hospital activo.
+ * En caso de error, no se almacena nada en detalles.
  */
-char *mostrar_pokemones_detallado(hospital_t *activo, char *detalles);
+void mostrar_pokemones_detallado(hospital_t *activo, char *detalles);
 
 /*
  * Destruye el hospital activo, liberando toda la memoria reservada.
