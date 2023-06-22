@@ -173,6 +173,8 @@ hash_t *hash_insertar(hash_t *hash, const char *clave, void *elemento,
 	nodo->siguiente = hash->pares[posicion];
 	hash->pares[posicion] = nodo;
 	hash->cantidad++;
+	if (anterior != NULL)
+		*anterior = NULL;
 	return hash;
 }
 
