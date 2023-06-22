@@ -1,0 +1,5 @@
+1,Pikachu,20,Lucas
+2,Lapras,35,Abril
+3,Jynx,2,Nico
+4,Voltorb,5,Pepe
+5,Rayquaza,7,Juan
