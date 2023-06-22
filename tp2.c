@@ -28,6 +28,54 @@ void mostrar_ayuda()
 	printf("D - Elimina el hospital activo del listado de hospitales\n");
 }
 
+menu_t *cargar(menu_t *menu)
+{
+	char archivo[100];
+	printf("Ingresa el nombre del archivo: ");
+	scanf("%s", archivo);
+	if (strlen(archivo) == 0) {
+		printf("Nombre de archivo vacio, intente nuevamente\n");
+		return NULL;
+	}
+
+	char clave[100];
+	printf("Ingresa un nombre para el hospital: ");
+	scanf("%s", clave);
+	if (strlen(clave) == 0) {
+		printf("El nombre no puede estar vacio, ingrese un nombre valido: ");
+		return NULL;
+	}
+	void *anterior;
+	cargar_hospital_desde_archivo(menu, archivo, clave, &anterior);
+	if (!menu) {
+		printf("Error al cargar un archivo, chequee que el nombre o formato del archivo sea correcto\n");
+	}
+	printf("Cargado correctamente!\n");
+
+	if (anterior != NULL) {
+		printf("Le pusiste al hospital un nombre repetido...\n");
+		printf("Quiere guardar el hospital viejo con otro nombre o destruirlo? Presione 'g' o 'd' segun corresponda\n");
+		printf(">");
+		char decision[5];
+		scanf("%s", decision);
+		if (strcmp(decision, "g") == 0) {
+			char clave[100];
+			printf("Ingresa un nombre para el hospital: ");
+			scanf("%s", clave);
+			if (strlen(clave) == 0) {
+				printf("El nombre no puede estar vacio, ingrese un nombre valido: ");
+				return NULL;
+			}
+			cargar_hospital(menu, clave, anterior);
+			printf("Hospital anterior cargado con exito!\n");
+		} else if (strcmp(decision, "d") == 0) {
+			hospital_destruir((hospital_t *)anterior);
+			printf("Hospital viejo destruido con exito!\n");
+		}
+	}
+	return menu;
+}
+
 void inicio()
 {
 	printf("Bienvenido a hospitales pokemon!\n");
@@ -67,7 +115,7 @@ int main()
 
 		} else if (strcmp(comando, "c") == 0 ||
 			   strcmp(comando, "cargar") == 0) {
-			cargar_hospital(menu);
+			cargar(menu);
 
 		} else if (strcmp(comando, "e") == 0 ||
 			   strcmp(comando, "estado") == 0) {
