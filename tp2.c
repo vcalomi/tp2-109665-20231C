@@ -162,11 +162,8 @@ void imprimir_pokemones_detallado(hospital_t *activo)
 int main()
 {
 	menu_t *menu = crear_menu();
-	char *comando = (char *)calloc(1, sizeof(char) * 30);
-	if (!comando) {
-		destruir_menu(menu);
-		return -1;
-	}
+	char comando[30];
+	comando[0] = '\0';
 	inicio();
 	printf(">");
 	scanf("%s", comando);
@@ -174,9 +171,6 @@ int main()
 	hospital_t *activo = NULL;
 	char clave_activa[100];
 	clave_activa[0] = '\0';
-	// = calloc(1, sizeof(char) * 100);
-	// if (!clave_activa)
-	// 	return -1;
 	while (true) {
 		if (strcmp(comando, "h") == 0 ||
 		    strcmp(comando, "ayuda") == 0 ||
@@ -188,9 +182,6 @@ int main()
 			   strcmp(comando, "exit") == 0) {
 			printf("Saliendo...\n");
 			destruir_menu(menu);
-			free(comando);
-			// if (activo != NULL)
-			// 	free(clave_activa);
 			break;
 
 		} else if (strcmp(comando, "c") == 0 ||
