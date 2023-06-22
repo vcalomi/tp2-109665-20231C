@@ -51,7 +51,7 @@ hospital_t *activar_hospital(menu_t *menu, char *identificador,
 /*
  * Muestra un listado con los nombres de los pokemones en el hospital activo.
  */
-void mostrar_pokemones(hospital_t *activo);
+char *mostrar_pokemones(hospital_t *activo, char *pokemones);
 
 /*
  * Muestra un listado detallando los datos de cada pokemon en el hospital activo.

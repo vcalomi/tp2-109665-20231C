@@ -135,6 +135,17 @@ void imprimir_estado(menu_t *menu, hospital_t *activo, char *clave_activa)
 		printf("Hospital activo - %s\n", clave_activa);
 }
 
+void imprimir_pokemones(hospital_t *activo)
+{
+	if (!activo) {
+		printf("No hay ningun hospital activo\n");
+		return;
+	}
+	char pokemones[1000];
+	pokemones[0] = '\0';
+	mostrar_pokemones(activo, pokemones);
+	printf("%s", pokemones);
+}
 int main()
 {
 	menu_t *menu = crear_menu();
@@ -180,7 +191,7 @@ int main()
 
 		} else if (strcmp(comando, "m") == 0 ||
 			   strcmp(comando, "mostrar") == 0) {
-			mostrar_pokemones(activo);
+			imprimir_pokemones(activo);
 
 		} else if (strcmp(comando, "l") == 0 ||
 			   strcmp(comando, "listar") == 0) {

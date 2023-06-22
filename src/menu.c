@@ -55,9 +55,13 @@ bool destruir_hospitales(const char *clave, void *elemento, void *aux)
 	return true;
 }
 
-bool imprimir_pokemones(pokemon_t *pokemon, void *aux)
+bool concatenar_pokemones(pokemon_t *pokemon, void *aux)
 {
-	printf("%s\n", pokemon_nombre(pokemon));
+	char *resultado = (char *)aux;
+	char temp[100];
+	strcpy(temp, pokemon_nombre(pokemon));
+	strcat(temp, "\n");
+	strcat(resultado, temp);
 	return true;
 }
 
@@ -109,13 +113,11 @@ hospital_t *activar_hospital(menu_t *menu, char *identificador,
 	return hospital;
 }
 
-void mostrar_pokemones(hospital_t *activo)
+char *mostrar_pokemones(hospital_t *activo, char *pokemones)
 {
-	if (!activo) {
-		printf("No hay ningun hospital activo\n");
-		return;
-	}
-	hospital_a_cada_pokemon(activo, imprimir_pokemones, NULL);
+	hospital_a_cada_pokemon(activo, concatenar_pokemones,
+				(void *)pokemones);
+	return pokemones;
 }
 
 void mostrar_pokemones_detallado(hospital_t *activo)
