@@ -94,11 +94,17 @@ bool concatenar_pokemones_detallado(pokemon_t *pokemon, void *aux)
 menu_t *cargar_hospital_desde_archivo(menu_t *menu, char *nombre_archivo,
 				      char *clave, void **anterior)
 {
-	hospital_t *hospital = hospital_crear_desde_archivo(nombre_archivo);
-	if (hospital == NULL) {
+	if (menu == NULL || nombre_archivo == NULL || clave == NULL ||
+	    strlen(clave) == 0 || strlen(nombre_archivo) == 0)
 		return NULL;
-	}
+	hospital_t *hospital = hospital_crear_desde_archivo(nombre_archivo);
+	if (hospital == NULL)
+		return NULL;
 
+	if (hash_obtener(menu->hospitales, clave) != NULL) {
+		hash_insertar(menu->hospitales, clave, hospital, anterior);
+		return menu;
+	}
 	hash_insertar(menu->hospitales, clave, hospital, anterior);
 	menu->cantidad_hospitales++;
 	return menu;
@@ -106,14 +112,18 @@ menu_t *cargar_hospital_desde_archivo(menu_t *menu, char *nombre_archivo,
 
 menu_t *cargar_hospital(menu_t *menu, char *clave, void *elemento)
 {
-	if (!menu)
+	if (!menu || !clave || strlen(clave) == 0)
 		return NULL;
+
 	hash_insertar(menu->hospitales, clave, (hospital_t *)elemento, NULL);
+	menu->cantidad_hospitales++;
 	return menu;
 }
 
-char *mostrar_estado(menu_t *menu, hospital_t *activo, char *estado)
+char *mostrar_estado(menu_t *menu, char *estado)
 {
+	if (!menu)
+		return NULL;
 	hash_con_cada_clave(menu->hospitales, listar_hospitales,
 			    (void *)estado);
 	return estado;
@@ -122,6 +132,8 @@ char *mostrar_estado(menu_t *menu, hospital_t *activo, char *estado)
 hospital_t *activar_hospital(menu_t *menu, char *identificador,
 			     char *clave_activa)
 {
+	if (!menu || !identificador || !clave_activa)
+		return NULL;
 	void *hospital_void_ptr = hash_obtener(menu->hospitales, identificador);
 	if (!hospital_void_ptr)
 		return NULL;
@@ -133,6 +145,8 @@ hospital_t *activar_hospital(menu_t *menu, char *identificador,
 
 char *mostrar_pokemones(hospital_t *activo, char *pokemones)
 {
+	if (!activo)
+		return NULL;
 	hospital_a_cada_pokemon(activo, concatenar_pokemones,
 				(void *)pokemones);
 	return pokemones;
@@ -148,9 +162,8 @@ char *mostrar_pokemones_detallado(hospital_t *activo, char *detalles)
 int destruir_hospital_activo(menu_t *menu, hospital_t *hospital,
 			     char *clave_activa)
 {
-	if (!menu || !hospital) {
+	if (!menu || !hospital || !clave_activa)
 		return -1;
-	}
 
 	hash_quitar(menu->hospitales, clave_activa);
 	hospital_destruir(hospital);

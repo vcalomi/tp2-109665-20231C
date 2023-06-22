@@ -34,7 +34,7 @@ menu_t *cargar_hospital(menu_t *menu, char *clave, void *elemento);
 /*
  * Devuelve los hospitales cargados y el hospital activo o NULL en caso de error.
  */
-char *mostrar_estado(menu_t *menu, hospital_t *activo, char *estado);
+char *mostrar_estado(menu_t *menu, char *estado);
 
 /*
  * Destruye el menu liberando la memoria reservada.
