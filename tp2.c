@@ -127,7 +127,7 @@ void imprimir_estado(menu_t *menu, hospital_t *activo, char *clave_activa)
 		       cantidad_hospitales(menu));
 	char estado[1000];
 	estado[0] = '\0';
-	mostrar_estado(menu, activo, estado);
+	mostrar_estado(menu, estado);
 	printf("%s", estado);
 	if (!activo)
 		printf("No hay hospital activo\n");
