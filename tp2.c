@@ -146,6 +146,19 @@ void imprimir_pokemones(hospital_t *activo)
 	mostrar_pokemones(activo, pokemones);
 	printf("%s", pokemones);
 }
+
+void imprimir_pokemones_detallado(hospital_t *activo)
+{
+	if (!activo) {
+		printf("No hay ningun hospital activo\n");
+		return;
+	}
+	char detalles[1000];
+	detalles[0] = '\0';
+	mostrar_pokemones_detallado(activo, detalles);
+	printf("%s", detalles);
+}
+
 int main()
 {
 	menu_t *menu = crear_menu();
@@ -159,9 +172,11 @@ int main()
 	scanf("%s", comando);
 	convertir_a_minusculas(comando);
 	hospital_t *activo = NULL;
-	char *clave_activa = calloc(1, sizeof(char) * 100);
-	if (!clave_activa)
-		return -1;
+	char clave_activa[100];
+	clave_activa[0] = '\0';
+	// = calloc(1, sizeof(char) * 100);
+	// if (!clave_activa)
+	// 	return -1;
 	while (true) {
 		if (strcmp(comando, "h") == 0 ||
 		    strcmp(comando, "ayuda") == 0 ||
@@ -174,7 +189,8 @@ int main()
 			printf("Saliendo...\n");
 			destruir_menu(menu);
 			free(comando);
-			free(clave_activa);
+			// if (activo != NULL)
+			// 	free(clave_activa);
 			break;
 
 		} else if (strcmp(comando, "c") == 0 ||
@@ -195,7 +211,7 @@ int main()
 
 		} else if (strcmp(comando, "l") == 0 ||
 			   strcmp(comando, "listar") == 0) {
-			mostrar_pokemones_detallado(activo);
+			imprimir_pokemones_detallado(activo);
 
 		} else if (strcmp(comando, "d") == 0 ||
 			   strcmp(comando, "destruir") == 0) {

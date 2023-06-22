@@ -65,11 +65,29 @@ bool concatenar_pokemones(pokemon_t *pokemon, void *aux)
 	return true;
 }
 
-bool imprimir_pokemones_detallado(pokemon_t *pokemon, void *aux)
+bool concatenar_pokemones_detallado(pokemon_t *pokemon, void *aux)
 {
-	printf("Id del pokemon: %ld, Nombre: %s, Salud: %ld, Entrenador/es: %s\n",
-	       pokemon_id(pokemon), pokemon_nombre(pokemon),
-	       pokemon_salud(pokemon), pokemon_entrenador(pokemon));
+	char *resultado = (char *)aux;
+	char temp_1[100];
+	char temp_2[100];
+	char temp_3[100];
+	char temp_4[100];
+
+	sprintf(temp_1, "%ld", pokemon_id(pokemon));
+	strcpy(temp_2, pokemon_nombre(pokemon));
+	sprintf(temp_3, "%ld", pokemon_salud(pokemon));
+	strcpy(temp_4, pokemon_entrenador(pokemon));
+
+	strcat(resultado, "Id del pokemon: ");
+	strcat(resultado, temp_1);
+	strcat(resultado, ", Nombre: ");
+	strcat(resultado, temp_2);
+	strcat(resultado, ", Salud: ");
+	strcat(resultado, temp_3);
+	strcat(resultado, ", Entrenador/es: ");
+	strcat(resultado, temp_4);
+	strcat(resultado, "\n");
+
 	return true;
 }
 
@@ -120,13 +138,11 @@ char *mostrar_pokemones(hospital_t *activo, char *pokemones)
 	return pokemones;
 }
 
-void mostrar_pokemones_detallado(hospital_t *activo)
+char *mostrar_pokemones_detallado(hospital_t *activo, char *detalles)
 {
-	if (!activo) {
-		printf("No hay ningun hospital activo\n");
-		return;
-	}
-	hospital_a_cada_pokemon(activo, imprimir_pokemones_detallado, NULL);
+	hospital_a_cada_pokemon(activo, concatenar_pokemones_detallado,
+				(void *)detalles);
+	return detalles;
 }
 
 int destruir_hospital_activo(menu_t *menu, hospital_t *hospital,
@@ -137,7 +153,6 @@ int destruir_hospital_activo(menu_t *menu, hospital_t *hospital,
 	}
 
 	hash_quitar(menu->hospitales, clave_activa);
-	free(clave_activa);
 	hospital_destruir(hospital);
 	hospital = NULL;
 	clave_activa = NULL;

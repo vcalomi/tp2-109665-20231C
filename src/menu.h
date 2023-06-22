@@ -56,7 +56,7 @@ char *mostrar_pokemones(hospital_t *activo, char *pokemones);
 /*
  * Muestra un listado detallando los datos de cada pokemon en el hospital activo.
  */
-void mostrar_pokemones_detallado(hospital_t *activo);
+char *mostrar_pokemones_detallado(hospital_t *activo, char *detalles);
 
 /*
  * Destruye el hospital activo, liberando toda la memoria reservada.
