@@ -98,6 +98,18 @@ hospital_t *activar(menu_t *menu, char *clave_activa)
 	return activo;
 }
 
+void destruir_activo(menu_t *menu, hospital_t *hospital_activo,
+		     char *clave_activa)
+{
+	int resultado =
+		destruir_hospital_activo(menu, hospital_activo, clave_activa);
+	if (resultado == -1) {
+		printf("No hay hospital activo\n");
+		return;
+	}
+	printf("Hospital eliminado con exito\n");
+}
+
 int main()
 {
 	menu_t *menu = crear_menu();
@@ -151,7 +163,7 @@ int main()
 
 		} else if (strcmp(comando, "d") == 0 ||
 			   strcmp(comando, "destruir") == 0) {
-			destruir_hospital_activo(menu, activo, clave_activa);
+			destruir_activo(menu, activo, clave_activa);
 			activo = NULL;
 			clave_activa = NULL;
 		} else

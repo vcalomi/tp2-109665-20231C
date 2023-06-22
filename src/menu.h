@@ -55,8 +55,9 @@ void mostrar_pokemones_detallado(hospital_t *activo);
 
 /*
  * Destruye el hospital activo, liberando toda la memoria reservada.
+ * Devuelve 0 si se libero con exito o -1 en caso de error.
  */
-void destruir_hospital_activo(menu_t *menu, hospital_t *hospital,
-			      char *clave_activa);
+int destruir_hospital_activo(menu_t *menu, hospital_t *hospital,
+			     char *clave_activa);
 
 #endif /* __MENU_H__ */

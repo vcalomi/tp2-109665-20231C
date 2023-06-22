@@ -130,12 +130,11 @@ void mostrar_pokemones_detallado(hospital_t *activo)
 	hospital_a_cada_pokemon(activo, imprimir_pokemones_detallado, NULL);
 }
 
-void destruir_hospital_activo(menu_t *menu, hospital_t *hospital,
-			      char *clave_activa)
+int destruir_hospital_activo(menu_t *menu, hospital_t *hospital,
+			     char *clave_activa)
 {
 	if (!menu || !hospital) {
-		printf("No hay hospital activo");
-		return;
+		return -1;
 	}
 
 	hash_quitar(menu->hospitales, clave_activa);
@@ -144,9 +143,7 @@ void destruir_hospital_activo(menu_t *menu, hospital_t *hospital,
 	hospital = NULL;
 	clave_activa = NULL;
 	menu->cantidad_hospitales -= 1;
-	if (!hospital) {
-		printf("Hospital destruido con exito\n");
-	}
+	return 0;
 }
 
 void destruir_menu(menu_t *menu)
