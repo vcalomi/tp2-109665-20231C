@@ -22,6 +22,13 @@ menu_t *crear_menu()
 	return menu;
 }
 
+size_t cantidad_hospitales(menu_t *menu)
+{
+	if (!menu || !menu->cantidad_hospitales)
+		return 0;
+	return menu->cantidad_hospitales;
+}
+
 void to_lower(char *cadena)
 {
 	int i = 0;
@@ -33,9 +40,12 @@ void to_lower(char *cadena)
 
 bool listar_hospitales(const char *clave, void *valor, void *aux)
 {
-	if (strcmp(clave, (char *)aux) == 0)
-		return true;
-	printf("- Hospital %s\n", clave);
+	char *resultado = (char *)aux;
+
+	strcat(resultado, "- Hospital ");
+	strcat(resultado, clave);
+	strcat(resultado, "\n");
+
 	return true;
 }
 
@@ -80,24 +90,11 @@ menu_t *cargar_hospital(menu_t *menu, char *clave, void *elemento)
 	return menu;
 }
 
-void mostrar_estado(menu_t *menu, hospital_t *activo, char *clave_activa)
+char *mostrar_estado(menu_t *menu, hospital_t *activo, char *estado)
 {
-	if (menu->cantidad_hospitales == 0) {
-		printf("No hay ningun hospital cargado\n");
-		return;
-	}
-	if (menu->cantidad_hospitales == 1)
-		printf("Hay %ld Hospital cargado:\n",
-		       menu->cantidad_hospitales);
-	else
-		printf("Hay %ld Hospitales cargados:\n",
-		       menu->cantidad_hospitales);
 	hash_con_cada_clave(menu->hospitales, listar_hospitales,
-			    (void *)clave_activa);
-	if (activo != NULL) {
-		printf("Hospital activo - %s\n", clave_activa);
-	} else
-		printf("No hay hospital activo\n");
+			    (void *)estado);
+	return estado;
 }
 
 hospital_t *activar_hospital(menu_t *menu, char *identificador,

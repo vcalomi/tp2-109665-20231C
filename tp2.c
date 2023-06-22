@@ -46,11 +46,13 @@ menu_t *cargar(menu_t *menu)
 		return NULL;
 	}
 	void *anterior;
-	cargar_hospital_desde_archivo(menu, archivo, clave, &anterior);
-	if (!menu) {
+	menu_t *resultado =
+		cargar_hospital_desde_archivo(menu, archivo, clave, &anterior);
+	if (resultado == NULL) {
+		anterior = NULL;
 		printf("Error al cargar un archivo, chequee que el nombre o formato del archivo sea correcto\n");
-	}
-	printf("Cargado correctamente!\n");
+	} else
+		printf("Cargado correctamente!\n");
 
 	if (anterior != NULL) {
 		printf("Le pusiste al hospital un nombre repetido...\n");
@@ -108,6 +110,29 @@ void destruir_activo(menu_t *menu, hospital_t *hospital_activo,
 		return;
 	}
 	printf("Hospital eliminado con exito\n");
+	clave_activa = NULL;
+}
+
+void imprimir_estado(menu_t *menu, hospital_t *activo, char *clave_activa)
+{
+	if (cantidad_hospitales(menu) == 0) {
+		printf("No hay ningun hospital cargado\n");
+		return;
+	}
+	if (cantidad_hospitales(menu) == 1)
+		printf("Hay %ld Hospital cargado:\n",
+		       cantidad_hospitales(menu));
+	else
+		printf("Hay %ld Hospitales cargados:\n",
+		       cantidad_hospitales(menu));
+	char estado[1000];
+	estado[0] = '\0';
+	mostrar_estado(menu, activo, estado);
+	printf("%s", estado);
+	if (!activo)
+		printf("No hay hospital activo\n");
+	else
+		printf("Hospital activo - %s\n", clave_activa);
 }
 
 int main()
@@ -147,7 +172,7 @@ int main()
 
 		} else if (strcmp(comando, "e") == 0 ||
 			   strcmp(comando, "estado") == 0) {
-			mostrar_estado(menu, activo, clave_activa);
+			imprimir_estado(menu, activo, clave_activa);
 
 		} else if (strcmp(comando, "a") == 0 ||
 			   strcmp(comando, "activar") == 0) {
@@ -165,7 +190,6 @@ int main()
 			   strcmp(comando, "destruir") == 0) {
 			destruir_activo(menu, activo, clave_activa);
 			activo = NULL;
-			clave_activa = NULL;
 		} else
 			printf("No existe ese comando... Intenta con otro o escribe h para recibir ayuda\n");
 		printf(">");

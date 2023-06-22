@@ -13,6 +13,11 @@ typedef struct menu menu_t;
 menu_t *crear_menu();
 
 /*
+ * Devuelve la cantidad de hospitales en el menu o 0 en caso de error.
+ */
+size_t cantidad_hospitales(menu_t *menu);
+
+/*
  * Pide al usuario un archivo y un nombre para cargar el hospital en el programa.
  * En caso que haya un hospital con ese nombre, se reemplaza el hospital anterior por el nuevo y se guarda el viejo en la variable anterior.
  * Devuelve el menu si cargo el hospital o NULL en caso de error.
@@ -27,9 +32,9 @@ menu_t *cargar_hospital_desde_archivo(menu_t *menu, char *nombre_archivo,
 menu_t *cargar_hospital(menu_t *menu, char *clave, void *elemento);
 
 /*
- * Muestra un listado de los hospitales cargados y el hospital activo en caso de haber uno.
+ * Devuelve los hospitales cargados y el hospital activo o NULL en caso de error.
  */
-void mostrar_estado(menu_t *menu, hospital_t *activo, char *clave_activa);
+char *mostrar_estado(menu_t *menu, hospital_t *activo, char *estado);
 
 /*
  * Destruye el menu liberando la memoria reservada.
