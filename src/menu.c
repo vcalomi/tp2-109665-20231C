@@ -59,65 +59,24 @@ bool imprimir_pokemones_detallado(pokemon_t *pokemon, void *aux)
 	return true;
 }
 
-menu_t *cargar_hospital(menu_t *menu)
+menu_t *cargar_hospital_desde_archivo(menu_t *menu, char *nombre_archivo,
+				      char *clave, void **anterior)
 {
-	char archivo[100];
-	printf("Ingresa el nombre del archivo: ");
-	scanf("%s", archivo);
-
-	hospital_t *hospital = hospital_crear_desde_archivo(archivo);
+	hospital_t *hospital = hospital_crear_desde_archivo(nombre_archivo);
 	if (hospital == NULL) {
-		printf("Nombre de archivo o formato de archivo incorrecto, intente nuevamente\n");
 		return NULL;
 	}
 
-	int c;
-	while ((c = getchar()) != '\n' && c != EOF)
-		continue;
-
-	char clave[100];
-	printf("Ingresa un nombre para guardar el hospital: ");
-	fgets(clave, sizeof(clave), stdin);
-	clave[strcspn(clave, "\n")] = '\0';
-	if (strlen(clave) == 0) {
-		printf("El nombre no puede estar vacio, ingrese un nombre valido: ");
-		fgets(clave, sizeof(clave), stdin);
-		clave[strcspn(clave, "\n")] = '\0';
-	}
-
-	if (hash_obtener(menu->hospitales, clave) != NULL) {
-		char decision[5];
-		printf("Ya existe un hospital con ese nombre\n");
-		printf("Se sobreescribira el hospital, y perderas el hospital anterior");
-		printf("Si quieres continuar, presiona 's', sino presiona 'n'\n");
-		printf(">");
-		scanf("%s", decision);
-		to_lower(decision);
-		while (true) {
-			if (strcmp(decision, "s") == 0 ||
-			    strcmp(decision, "si") == 0) {
-				void *anterior;
-				hash_insertar(menu->hospitales, clave, hospital,
-					      &anterior);
-				hospital_destruir((hospital_t *)anterior);
-				printf("Sobreescrito correctamente\n");
-				return menu;
-			} else if (strcmp(decision, "n") == 0 ||
-				   strcmp(decision, "no") == 0) {
-				printf("Carga cancelada\n");
-				return NULL;
-			} else {
-				printf("Entrada incorrecta, intente nuevamente con 's' o 'n'\n");
-				printf(">");
-				scanf("%s", decision);
-				to_lower(decision);
-			}
-		}
-	}
-
-	hash_insertar(menu->hospitales, clave, hospital, NULL);
+	hash_insertar(menu->hospitales, clave, hospital, anterior);
 	menu->cantidad_hospitales++;
-	printf("Cargado correctamente\n");
+	return menu;
+}
+
+menu_t *cargar_hospital(menu_t *menu, char *clave, void *elemento)
+{
+	if (!menu)
+		return NULL;
+	hash_insertar(menu->hospitales, clave, (hospital_t *)elemento, NULL);
 	return menu;
 }
 
@@ -198,7 +157,9 @@ void destruir_hospital_activo(menu_t *menu, hospital_t *hospital,
 
 void destruir_menu(menu_t *menu)
 {
-	hash_con_cada_clave(menu->hospitales, destruir_hospitales, NULL);
+	if (menu->hospitales != NULL)
+		hash_con_cada_clave(menu->hospitales, destruir_hospitales,
+				    NULL);
 	hash_destruir(menu->hospitales);
 	free(menu);
 }
