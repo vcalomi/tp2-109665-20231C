@@ -4,6 +4,12 @@ CC = gcc
 
 all: clean valgrind-chanutron tp2
 
+valgrind-alumno: pruebas_alumno
+	valgrind $(VALGRIND_FLAGS) ./pruebas_alumno
+
+pruebas_alumno: src/*.c pruebas_alumno.c
+	$(CC) $(CFLAGS) src/*.c pruebas_alumno.c -o pruebas_alumno
+
 valgrind-chanutron: pruebas_chanutron
 	valgrind $(VALGRIND_FLAGS) ./pruebas_chanutron
 
