@@ -82,6 +82,22 @@ void inicio()
 	printf("Puede comenzar cargando un hospital escribiendo 'c' o si no sabes como funciona escribe 'h' para recibir ayuda\n");
 }
 
+hospital_t *activar(menu_t *menu, char *clave_activa)
+{
+	char identificador[100];
+	printf("Ingresa el nombre del hospital que deseas activar: ");
+	scanf("%s", identificador);
+	hospital_t *activo =
+		activar_hospital(menu, identificador, clave_activa);
+	if (!activo) {
+		printf("No existe un hospital con ese nombre\n");
+		return NULL;
+	}
+	printf("Hospital %s activado, este hospital tiene %ld pokemones\n",
+	       clave_activa, hospital_cantidad_pokemones(activo));
+	return activo;
+}
+
 int main()
 {
 	menu_t *menu = crear_menu();
@@ -123,7 +139,7 @@ int main()
 
 		} else if (strcmp(comando, "a") == 0 ||
 			   strcmp(comando, "activar") == 0) {
-			activo = activar_hospital(menu, clave_activa);
+			activo = activar(menu, clave_activa);
 
 		} else if (strcmp(comando, "m") == 0 ||
 			   strcmp(comando, "mostrar") == 0) {
