@@ -145,10 +145,9 @@ hospital_t *activar_hospital(menu_t *menu, char *identificador,
 void mostrar_pokemones(hospital_t *activo, char *pokemones)
 {
 	if (!activo)
-		return NULL;
+		return;
 	hospital_a_cada_pokemon(activo, concatenar_pokemones,
 				(void *)pokemones);
-	return pokemones;
 }
 
 void mostrar_pokemones_detallado(hospital_t *activo, char *detalles)
@@ -157,7 +156,6 @@ void mostrar_pokemones_detallado(hospital_t *activo, char *detalles)
 		return;
 	hospital_a_cada_pokemon(activo, concatenar_pokemones_detallado,
 				(void *)detalles);
-	return detalles;
 }
 
 int destruir_hospital_activo(menu_t *menu, hospital_t *hospital,
