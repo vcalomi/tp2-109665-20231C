@@ -44,6 +44,8 @@ Luego podemos realizar ciertas operaciones del TDA menu a traves de la interfaz 
 
 Por ejemplo, podemos activar un hospital, para ver los pokemones y los datos que contiene. Este hospital activo lo podemos destruir tambien, para eliminarlo de la tabla de hash y por lo tanto del programa.
 
+Una aclaracion: en el enunciado pide que para identificar a cada hospital usemos un numero. Yo decidi utilizar de cualquier manera un nombre (que podria ser tranquilamente un numero) ya que lo utilizo como clave en la tabla de hash dentro del TDA menu.
+
 ---
 
 ## Respuestas a las preguntas teóricas
@@ -63,6 +65,8 @@ Aqui las complejidades:
 | Hospital destruir            | O(n)  |
 | Ordenar por salud            | O(n²) |
 
+Explicacion:
+
 - Crear hospital desde archivo implicaria crear cada pokemon, que es una operacion O(n) y luego insertar al principio cada pokemon en la lista , que es una operacion O(1), pero en promedio es O(n).
 
 - Obtener la cantidad de pokemones seria O(1) porque nuestra estructura aumenta o disminuye la cantidad al momento de la insercion o eliminacion.
@@ -75,7 +79,7 @@ Aqui las complejidades:
 
 - Hospital destruir es O(n) ya que debo recorrer el hospital para destruir la memoria de los pokemones almacenados, y luego destruir el hospital como tal.
 
-- Ordenar la lista enlazada por salud tendria complejidad O(n²). Para ordenar la lista, primero debo crear una lista nueva y empezar a comparar el primer elemento de la lista vieja. Si encuentro uno menor, actualizar el puntero y continuar iterando. Una vez encuentre el pokemon con menos salud, lo agrego al principio de la lista nueva y continuo. En el peor de los casos (que la lista este ordenada descendentemente) realizare todas las comparaciones posibles.
+- Ordenar la lista enlazada por salud tendria complejidad O(n²). Para ordenar la lista, primero debo crear una lista nueva y empezar a comparar con el primer elemento de la lista vieja. Si encuentro uno menor, actualizar el puntero y continuar iterando. Una vez encuentre el pokemon con menos salud, lo agrego al principio de la lista nueva y continuo. En el peor de los casos (que la lista este ordenada descendentemente) realizare todas las comparaciones posibles.
 
 A grandes rasgos, utilizar una lista enlazada quiza no sea la forma mas eficiente. Ya que es prioritario mantener el orden por salud de los pokemones y ordenar luego de insertar en el arbol es una operacion ineficiente.
 
@@ -95,7 +99,7 @@ Aqui las complejidades si asumimos que esta balanceado:
 | Hospital destruir            | O(n)  |
 | Ordenar por salud            | O(1)  |
 
-- Crear hospital desde archivo implicaria algo similar al caso anterior. Debemos crear cada pokemon, que es una operacion O(n) y luego insertar cada pokemon en el arbol, en el peor caso (todos a la izquierda o todos a la derecha) es una operacion O(n²), pero en promedio es O(n log n).
+- Crear hospital desde archivo implicaria algo similar al caso anterior. Debemos crear cada pokemon, que es una operacion O(n) y luego insertar cada pokemon en el arbol, en el peor caso (insertar todos a la izquierda o todos a la derecha) es una operacion en total O(n²), pero en promedio es O(n log n).
 
 - Nuevamente cantidad es un dato de mi implementacion que aumenta o disminuye en la insercion o eliminacion respectivamente, por lo que solo hay que devolverlo.
 
@@ -110,3 +114,5 @@ Aqui las complejidades si asumimos que esta balanceado:
 - La utilidad del ABB seria justamente que podemos asumir que al insertar cada pokemon el arbol quedara correctamente ordenado.
 
 Aunque en el peor caso algunas operaciones son ineficientes, en el caso promedio las operaciones del ABB son O(n log n), lo cual es una mejora respecto de la implementacion con vector dinamico donde las operaciones tienden a ser O(n).
+
+Respecto de las pruebas en ambas implementaciones, no deberia haber mayores cambios. Ya que las pruebas se hicieron mirando la interfaz provista y no la implementacion en si. Por ello, si las funciones devuelven lo que el contrato estipula, no deberia haber ningun inconveniente.
