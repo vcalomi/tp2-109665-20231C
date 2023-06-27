@@ -40,7 +40,7 @@ Entonces, en el programa tp2, cuando un usuario escribe el comando de cargar, se
 
 <img width=70% src="./img/carga_hospital.svg">
 
-Luego podemos realizar ciertas operaciones del TDA menu a traves de la interfaz provista por el tp2.
+Luego podemos realizar ciertas operaciones del TDA menu a traves del programa tp2.
 
 Por ejemplo, podemos activar un hospital, para ver los pokemones y los datos que contiene. Este hospital activo lo podemos destruir tambien, para eliminarlo de la tabla de hash y por lo tanto del programa.
 
